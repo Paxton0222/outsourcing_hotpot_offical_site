@@ -1,0 +1,113 @@
+<script lang="ts" setup>
+import BaseLayout from "@/Layouts/BaseLayout.vue"
+import { PageResponseWithData, PageSearch } from "@/types/pagination"
+import { Head } from "@inertiajs/vue3"
+import { {{ model_name }} } from "@/types/model"
+import PaginateTable from "@/Components/Table/PaginateTable.vue"
+import { onMounted, Ref, ref } from "vue"
+import DangerButton from "@/Components/Button/DangerButton.vue"
+import Checkbox from "@/Components/Form/Components/Checkbox.vue"
+import SearchInput from "@/Components/Table/SearchInput.vue"
+import SortThead from "@/Components/Table/SortThead.vue"
+import { useSearchInput, useSortThead } from "@/pagination"
+
+const props = defineProps<PageResponseWithData<{{ model_name }}>>()
+const routes = {
+    create: "{{ route }}.create",
+    update: "{{ route }}.update",
+    delete: "{{ route }}.delete",
+    deleteMulti: "api.{{ route }}.delete",
+}
+const forms = {
+    create: {
+        name: "",
+    },
+    update: {},
+    delete: {
+        id: undefined,
+    },
+}
+const deleteBy = ["id"]
+
+const table = ref<InstanceType<typeof PaginateTable> | null>(null)
+
+const {
+    search: searchId,
+    searchInputElement: searchIdInputElement,
+    setQuery: setQueryId,
+} = useSearchInput(table, "id")
+const { sort: sortId, useSetSort: useSetIdSort } = useSortThead(table, "id")
+</script>
+<template>
+    <BaseLayout>
+        <template #header>
+            <Head title="{{ model_name }}列表" />
+        </template>
+        <div class="h-full p-8 bg-base-200 rounded-xl">
+            <PaginateTable
+                ref="table"
+                :page-props="props"
+                :routes="routes"
+                :forms="forms"
+                :delete-by="deleteBy"
+            >
+                <template #table-header-left-custom>
+                    <SearchInput
+                        ref="searchIdInputElement"
+                        v-model="searchId"
+                        type="number"
+                        min="1"
+                        placeholder="搜尋 ID"
+                        column="id"
+                        operator="="
+                        @keydown.enter="setQueryId"
+                    />
+                </template>
+                <template #thead>
+                    <SortThead column="id" v-model="sortId" @update-status="useSetIdSort">ID</SortThead>
+                    <th>操作</th>
+                </template>
+                <template
+                    #tbody="{
+                        form,
+                        index,
+                        checkboxes,
+                        update_submit,
+                        delete_modal,
+                        delete_set_data,
+                    }"
+                >
+                    <th>
+                        <label>
+                            <Checkbox
+                                v-model="checkboxes[index]"
+                                :checked="checkboxes[index]"
+                            />
+                        </label>
+                    </th>
+                    <td>{{ form.id }}</td>
+                    <td>
+                        <DangerButton
+                            class="btn-outline btn-sm"
+                            @click="
+                                delete_modal?.modal?.showModal(),
+                                    delete_set_data(form)
+                            "
+                        >
+                            刪除
+                        </DangerButton>
+                    </td>
+                </template>
+                <template #createModalTitle> 建立{{ model_name }} </template>
+                <template #createModalForm="{ form }">
+                </template>
+                <template #deleteModalTitle="{ form }">
+                    確定要刪除{{ model_name }}ID: {{ form.id }}?
+                </template>
+                <template #deleteMultiModalTitle>
+                    確定要刪除所選的全部{{ model_name }}?
+                </template>
+            </PaginateTable>
+        </div>
+    </BaseLayout>
+</template>

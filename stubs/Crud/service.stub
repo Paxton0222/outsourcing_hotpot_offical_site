@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Services;
+
+use App\Repositories\{{ model_name }}Repository;
+
+class {{ model_name }}Service implements CrudByIdServiceInterface
+{
+    use CrudByIdService;
+
+    private {{ model_name }}Repository ${{ model_name }}Repository;
+
+    public function __construct({{ model_name }}Repository ${{ model_name }}Repository)
+    {
+        $this->{{ model_name }}Repository = ${{ model_name }}Repository;
+        $this->initRepository($this->{{ model_name }}Repository);
+    }
+}

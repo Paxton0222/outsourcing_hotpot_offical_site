@@ -1,0 +1,11 @@
+vendor/
+.run/
+.git/
+node_modules/
+public/
+conf.d/
+compose.yml
+docker-compose.yml
+Dockerfile
+.env
+hot

@@ -1,0 +1,2 @@
+export interface {{ model_name }}Fillable {}
+export type {{ model_name }} = Partial<AutoIncrement> & Partial<{{ model_name }}Fillable>

@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Api\CrudByIdApiController;
+use App\Http\Requests\{{ model_name }}\Delete{{ model_name }}DeleteRequest;
+use App\Http\Requests\{{ model_name }}\Get{{ model_name }}EditRequest;
+use App\Http\Requests\{{ model_name }}\Post{{ model_name }}CreateRequest;
+use App\Http\Requests\{{ model_name }}\Put{{ model_name }}UpdateRequest;
+use App\Services\{{ model_name }}Service;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class {{ model_name }}Controller extends Controller
+{
+    use CrudByIdApiController {
+        CrudByIdApiController::get as private getById;
+        CrudByIdApiController::create as private createOne;
+        CrudByIdApiController::update as private updateById;
+        CrudByIdApiController::delete as private deleteById;
+    }
+
+    private {{ model_name }}Service ${{ model_name }}Service;
+
+    public function __construct({{ model_name }}Service ${{ model_name }}Service)
+    {
+        $this->{{ model_name }}Service = ${{ model_name }}Service;
+        $this->initService($this->{{ model_name }}Service);
+    }
+
+    public function edit(Get{{ model_name }}EditRequest $request): Response
+    {
+        [$page, $prePage, $search, $asc, $desc] = checkAndSetPageParameters($request, 1, 10);
+        $pageInfo = $this->{{ model_name }}Service->getPage(page: $page, perPage: $prePage, search: $search, asc: $asc, desc: $desc);
+        $result = [
+            'query' => [
+                'page' => $page,
+                'perPage' => $prePage,
+                'search' => $search,
+                'asc' => $asc,
+                'desc' => $desc,
+            ],
+        ];
+        $result = array_merge($result, $pageInfo);
+
+        return Inertia::render('{{ model_name }}Edit', $result);
+    }
+
+    public function create(Post{{ model_name }}CreateRequest $request): RedirectResponse
+    {
+        $this->createOne($request);
+
+        return Redirect::to(route('{{ route }}.edit', $request->query()));
+    }
+
+    public function update(Put{{ model_name }}UpdateRequest $request): RedirectResponse
+    {
+        $this->updateById($request);
+
+        return Redirect::to(route('{{ route }}.edit', $request->query()));
+    }
+
+    public function delete(Delete{{ model_name }}DeleteRequest $request): RedirectResponse
+    {
+        $this->deleteById($request);
+
+        return Redirect::to(route('{{ route }}.edit', $request->query()));
+    }
+}

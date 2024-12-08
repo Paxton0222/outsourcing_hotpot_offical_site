@@ -1,0 +1,6 @@
+Route::prefix('{{ route }}')->group(function () {
+    Route::get('/', [\App\Http\Controllers\{{ model_name }}Controller::class, 'edit'])->name('{{ route }}.edit');
+    Route::post('/', [\App\Http\Controllers\{{ model_name }}Controller::class, 'create'])->name('{{ route }}.create');
+    Route::put('/', [\App\Http\Controllers\{{ model_name }}Controller::class, 'update'])->name('{{ route }}.update');
+    Route::delete('/', [\App\Http\Controllers\{{ model_name }}Controller::class, 'delete'])->name('{{ route }}.delete');
+});

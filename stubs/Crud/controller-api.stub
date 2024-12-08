@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\{{ model_name }}\ApiDelete{{ model_name }}DeleteRequest;
+use App\Http\Requests\Api\{{ model_name }}\ApiGet{{ model_name }}ByIdRequest;
+use App\Http\Requests\Api\{{ model_name }}\ApiGet{{ model_name }}PageRequest;
+use App\Http\Requests\Api\{{ model_name }}\ApiPost{{ model_name }}CreateRequest;
+use App\Http\Requests\Api\{{ model_name }}\ApiPut{{ model_name }}UpdateRequest;
+use App\Models\{{ model_name }};
+use App\Services\{{ model_name }}Service;
+use Illuminate\Http\JsonResponse;
+
+class {{ model_name }}ApiController extends Controller
+{
+    use CrudByIdApiController {
+        CrudByIdApiController::get as private getById;
+        CrudByIdApiController::getPage as private getAllByPage;
+        CrudByIdApiController::create as private createOne;
+        CrudByIdApiController::update as private updateById;
+        CrudByIdApiController::delete as private deleteById;
+    }
+
+    private {{ model_name }}Service $service;
+
+    public function __construct({{ model_name }}Service ${{ model_name }}Service)
+    {
+        $this->service = ${{ model_name }}Service;
+        $this->initService($this->service);
+    }
+
+    public function get(ApiGet{{ model_name }}ByIdRequest $request): JsonResponse
+    {
+        return $this->getById($request);
+    }
+
+    public function getPage(ApiGet{{ model_name }}PageRequest $request): JsonResponse
+    {
+        return $this->getAllByPage($request, '{{ model_name }} 分頁');
+    }
+
+    public function create(ApiPost{{ model_name }}CreateRequest $request): JsonResponse
+    {
+        return $this->createOne($request);
+    }
+
+    public function update(ApiPut{{ model_name }}UpdateRequest $request): JsonResponse
+    {
+        return $this->updateById($request);
+    }
+
+    public function delete(ApiDelete{{ model_name }}DeleteRequest $request): JsonResponse
+    {
+        return $this->deleteById($request);
+    }
+}

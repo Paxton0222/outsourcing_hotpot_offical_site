@@ -1,0 +1,16 @@
+Route::prefix('{{ route }}')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Api\{{ model_name }}ApiController::class, 'get'])
+        ->name('api.{{ route }}.get')
+    ;
+    Route::get('/all', [\App\Http\Controllers\Api\{{ model_name }}ApiController::class, 'getPage'])
+        ->name('api.{{ route }}.get.all')
+    ;
+    Route::post('/', [\App\Http\Controllers\Api\{{ model_name }}ApiController::class, 'create'])
+        ->name('api.{{ route }}.create')
+    ;
+    Route::put('/', [\App\Http\Controllers\Api\{{ model_name }}ApiController::class, 'update'])
+        ->name('api.{{ route }}.update')
+    ;
+    Route::delete('/', [\App\Http\Controllers\Api\{{ model_name }}ApiController::class, 'delete'])
+        ->name('api.{{ route }}.delete') ;
+});

@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Http\Requests\Api\{{ model_name }};
+
+use App\Http\Requests\Traits\ApiResponse;
+use Illuminate\Foundation\Http\FormRequest;
+
+class ApiDelete{{ model_name }}DeleteRequest extends FormRequest
+{
+    use ApiResponse;
+
+    public function rules(): array
+    {
+        return [
+            'id' => 'required|integer|exists:{{ model }},id',
+        ];
+    }
+
+    public function authorize(): bool
+    {
+        return true;
+    }
+}
