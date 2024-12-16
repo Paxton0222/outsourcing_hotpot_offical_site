@@ -1,6 +1,6 @@
 mkdir /var/log/laravel
 
-nohup /usr/bin/supervisord -c /etc/supervisord.conf &
+#nohup /usr/bin/supervisord -c /etc/supervisord.conf &
 nohup npm run dev &
 nohup tail -f /var/log/laravel/queue.log &
 nohup tail -f /var/log/laravel/schedule.log &
@@ -13,4 +13,5 @@ php artisan key:generate
 php artisan optimize:clear
 php artisan migrate --force --isolated
 
-php artisan pail --timeout=0
+#php artisan pail --timeout=0
+/usr/bin/supervisord -c /etc/supervisord.conf

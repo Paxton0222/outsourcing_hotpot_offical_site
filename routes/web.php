@@ -49,4 +49,16 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+Route::get('/home', static function () {
+    return Inertia::render('HotPot/Home');
+})->name('home');
+Route::get('/classic', static function () {
+    return Inertia::render('HotPot/Classic');
+})->name('classic');
+Route::get('/location', static function () {
+    return Inertia::render('HotPot/Location');
+})->name('location');
+Route::get('/join', static function () {
+    return Inertia::render('HotPot/Join');
+})->name('join');
 require __DIR__ . '/auth.php';
